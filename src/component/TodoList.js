@@ -7,11 +7,11 @@ import TodosFiltered from './TodosFiltered'
 const TodoList = () => {
     const [todos, setTodos] = useState([]);
     const [clearEdit, setClearEdit] = useState(false);
-  
+    const baseUrl = process.env.REACT_APP_BASE_URL;
 
     useEffect(() => {
       const fetchData = async () => {
-        axios.get(`http://localhost:3000/todo/`)
+        axios.get(`${baseUrl}/todo/`)
         .then((res)=> {
           const newData = res.data;
           setTodos(newData);
@@ -26,7 +26,7 @@ const TodoList = () => {
       if (!todo.title || /^\s*$/.test(todo.tile)) {
         return;
       }
-      axios.post(`http://localhost:3000/todo/`,{
+      axios.post(`${baseUrl}/todo/`,{
         title: todo.title
       })
       .then((res)=> console.log('dfdf',res))
@@ -46,7 +46,7 @@ const TodoList = () => {
       if (!newValue.title || /^\s*$/.test(newValue.title)) {
         return;
       }
-      axios.put(`http://localhost:3000/todo/${todoId}`,{
+      axios.put(`${baseUrl}/todo/${todoId}`,{
         title: newValue.title
       })
       .then((res)=> console.log('dfdf',res))
@@ -55,7 +55,7 @@ const TodoList = () => {
     };
   
     const removeTodo = id => {
-      axios.delete(`http://localhost:3000/todo/${id}`)
+      axios.delete(`${baseUrl}/todo/${id}`)
       .then((res)=> console.log('dfdf',res))
       .catch((err)=> console.log('error',err));
       const removedArr = [...todos].filter(todo => todo.id !== id);
@@ -67,7 +67,7 @@ const TodoList = () => {
       let updatedTodos = todos.map(todo => {
         if (todo.id === id) {
           todo.isCompleted = !todo.isCompleted;
-          axios.put(`http://localhost:3000/todo/${id}/status/`,{
+          axios.put(`${baseUrl}/todo/${id}/status/`,{
             isCompleted: todo.isCompleted
           })
           .then((res)=> console.log('dfdf',res))
@@ -84,7 +84,7 @@ const TodoList = () => {
 
       let filteredArray = [];
       let newData = [];
-      axios.get(`http://localhost:3000/todo/`)
+      axios.get(`${baseUrl}/todo/`)
         .then((res)=> {
           newData = res.data;
           if(type.toLowerCase() === 'all'){
@@ -105,7 +105,7 @@ const TodoList = () => {
     } 
 
     const searchTodo = (prop) => { 
-      axios.get(`http://localhost:3000/todo/`)
+      axios.get(`${baseUrl}/todo/`)
         .then((res)=> {
           const newData = res.data;
           setTodos(newData.filter((todo) => todo.title.toLowerCase().includes(prop.title.toLowerCase()))); 
